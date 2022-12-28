@@ -1,6 +1,7 @@
 package ekrut.client.managers;
 
 import java.util.ArrayList;
+import ekrut.client.EKrutClient;
 import ekrut.entity.Order;
 import ekrut.entity.OrderStatus;
 import ekrut.net.ResultType;
@@ -14,7 +15,27 @@ import ekrut.net.ShipmentResponse;
  * @author Nir Betesh
  */
 public class ClientShipmentManager {
+	
+	private EKrutClient client;
+	private Object lock = new Object();
+	private ShipmentResponse shipmenResponse;
+	
 
+	/**
+	 * Constructs a new ClientShipmentManager instance and registers an ShipmentResponse handler.
+	 * 
+	 * @param client the EKrutClient for which to register the ShipmentResponse handler
+	 */
+	public ClientShipmentManager(EKrutClient client) {
+		this.client = client;
+		client.registerHandler(ShipmentResponse.class, (res) -> {
+			synchronized(lock) {
+				shipmenResponse = res;
+				lock.notify();
+			}
+		});
+	}
+	
 	/**
 	 * Fetches a list of orders that are ready for shipment in the specified area.
 	 * 
@@ -25,6 +46,7 @@ public class ClientShipmentManager {
 	 * or if an exception is thrown by the {@link #sendRequest(ShipmentRequest)} method
 	 */
 	public ArrayList<Order> fetchShipmentRequests(String area) throws Exception {
+		
 		if (area == null)
 			throw new IllegalArgumentException("Null string was provided");
 		
@@ -113,9 +135,22 @@ public class ClientShipmentManager {
 			throw new Exception(resultType.toString()); // Q.Nir exception??
 	}
 	
-	// Will completed later
+	/**
+	 * Sends a {@link ShipmentRequest} to the server and waits for a response.
+	 * 
+	 * @param shipmentRequest The {@link ShipmentRequest} to send to the server.
+	 * @return The {@link ShipmentResponse} received from the server.
+	 */
 	private ShipmentResponse sendRequest(ShipmentRequest shipmentRequest) {
-		
-		return null;
+		this.shipmenResponse = null;
+		client.sendRequestToServer(shipmentRequest);
+		synchronized(lock) {
+			while (shipmenResponse == null) {
+				try {
+					lock.wait();
+				} catch (InterruptedException e) {}
+			}
+		}
+		return shipmenResponse;
 	}
 }
