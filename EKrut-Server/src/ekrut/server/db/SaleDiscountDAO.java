@@ -29,8 +29,6 @@ public class SaleDiscountDAO {
 	 * 
 	 * @param saleDiscount the SaleDiscount object to be added to the database.
 	 * @return true if the discount was successfully created, false otherwise.
-	 * @throws SQLException if there is a problem executing the SQL query or
-	 *                      processing the result set.
 	 */
 	public boolean createDiscount(SaleDiscount saleDiscount) {
 		if (saleDiscount == null)
@@ -64,8 +62,6 @@ public class SaleDiscountDAO {
 	 * @param discountId the id of the discount to be fetched.
 	 * @return a SaleDiscount object with the data of the discount with the given
 	 *         id, or null if the discount was not found.
-	 * @throws SQLException if there is a problem executing the SQL query or
-	 *                      processing the result set.
 	 */
 	public SaleDiscount fetchSaleDiscountById(int discountId) {
 
@@ -95,8 +91,6 @@ public class SaleDiscountDAO {
 	 * 
 	 * @return a list of SaleDiscount objects representing the sale discount
 	 *         templates in the database.
-	 * @throws SQLException if there is a problem executing the SQL query or
-	 *                      processing the result set.
 	 */
 	public ArrayList<SaleDiscount> fetchSaleDiscountTemplatList() {
 
@@ -128,8 +122,6 @@ public class SaleDiscountDAO {
 	 * @param area the area for which to fetch the active sales.
 	 * @return a list of SaleDiscount objects representing the active sales for the
 	 *         given area.
-	 * @throws SQLException if there is a problem executing the SQL query or
-	 *                      processing the result set.
 	 */
 	public ArrayList<SaleDiscount> fetchActivateSaleDiscountListByArea(String area) {
 
