@@ -260,7 +260,13 @@ public class OrderDAO {
 		return true;
 	}
 
-	// For Almog: Added by Nir, get list of orders in Shipment status.
+	/**
+	 * Returns a list from DB of orders with type SHIPMENT and located in a specific area.
+	 * 
+	 * @param area the area of the orders to deliver.
+	 * @return a list of orders with type SHIPMENT and located in the specified area,
+	 * 		   or {@code null} if there are no orders matching the criteria.
+	*/
 	public ArrayList<Order> fetchOrderShipmentListByArea(String area) {
 		PreparedStatement ps = con.getPreparedStatement(
 				"SELECT orderId, date, status, type, dueDate, clientAddress, location, username "
