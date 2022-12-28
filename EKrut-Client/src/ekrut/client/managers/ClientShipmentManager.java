@@ -42,8 +42,6 @@ public class ClientShipmentManager {
 	 * @param area the area to fetch orders for
 	 * @return a list of orders ready for shipment
 	 * @throws IllegalArgumentException if a null string is provided as the area
-	 * @throws Exception if the result of the shipment request is not {@link ResultType#OK}
-	 * or if an exception is thrown by the {@link #sendRequest(ShipmentRequest)} method
 	 */
 	public ArrayList<Order> fetchShipmentRequests(String area) throws Exception {
 		
@@ -66,12 +64,11 @@ public class ClientShipmentManager {
 	 * Creates a request to the delivery department to approve sending a shipment for the specified order.
 	 * 
 	 * @param order the order to send a shipment request for
+	 * @return Return the result type, if success return 'OK', else return error type.
 	 * @throws IllegalArgumentException if a null order is provided
-	 * @throws Exception if the result of the shipment request is not {@link ResultType#OK}
-	 * or if an exception is thrown by the {@link #sendRequest(ShipmentRequest)} method
 	 */
 	// Should return something? Q.Nir
-	public void confirmShipment(Order order) throws Exception {
+	public ResultType confirmShipment(Order order) {
 		if (order == null)
 			throw new IllegalArgumentException("Null order was provided");
 
@@ -82,8 +79,7 @@ public class ClientShipmentManager {
 		
 		// In case resultType isn't "OK" exception will throws.
 		ResultType resultType = shipmentResponse.getResultCode();
-		if (resultType != ResultType.OK)
-			throw new Exception(resultType.toString()); // Q.Nir exception??
+		return resultType;
 	}
 
 	/**
@@ -93,11 +89,10 @@ public class ClientShipmentManager {
 	 * an {@link Exception} is thrown with the {@link ResultType} as the message.
 	 * 
 	 * @param order the order to confirm the delivery of
+	 * @return Return the result type, if success return 'OK', else return error type.
 	 * @throws IllegalArgumentException if the provided order is null
-	 * @throws Exception if the result of the shipment request is not {@link ResultType#OK} 
-	 * or if an exception is thrown by the {@link #sendRequest(ShipmentRequest)} method
 	 */
-	public void confirmDelivery(Order order) throws Exception {
+	public ResultType confirmDelivery(Order order) {
 		if (order == null)
 			throw new IllegalArgumentException("Null order was provided");
 		
@@ -108,8 +103,7 @@ public class ClientShipmentManager {
 		
 		// In case resultType isn't "OK" exception will throws.
 		ResultType resultType = shipmentResponse.getResultCode();
-		if (resultType != ResultType.OK)
-			throw new Exception(resultType.toString()); // Q.Nir exception??
+		return resultType;
 	}
 		
 	/**
@@ -118,10 +112,10 @@ public class ClientShipmentManager {
 	 * In case the {@link ShipmentResponse#getResultCode()} is not {@link ResultType#OK}, an {@link Exception} is thrown.
 	 * 
 	 * @param order the order to set the status to "done"
+	 * @return Return the result type, if success return 'OK', else return error type.
 	 * @throws IllegalArgumentException if the provided order is null
-	 * @throws Exception if the result of the shipment request is not {@link ResultType#OK}
 	 */
-	public void setDone(Order order) throws Exception {
+	public ResultType setDone(Order order) {
 		if (order == null)
 			throw new IllegalArgumentException("Null order was provided");
 		
@@ -131,8 +125,8 @@ public class ClientShipmentManager {
 		
 		// In case resultType isn't "OK" exception will throws.
 		ResultType resultType = shipmentResponse.getResultCode();
-		if (resultType != ResultType.OK)
-			throw new Exception(resultType.toString()); // Q.Nir exception??
+		
+		return resultType;
 	}
 	
 	/**
